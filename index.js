@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { load } from 'cheerio';
-
-//const https = require('https');
-//const fs = require('fs');
+import fs from 'fs';
+import https from 'https';
 
 const scraper = async () => {
   const html = await axios.get(
@@ -13,30 +12,16 @@ const scraper = async () => {
   $('div').each((i, elem) => {
     data.push($(elem).find('img').attr('src'));
   });
-  console.log(data);
   const slicedData = data.slice(3, 13);
   console.log(slicedData);
+
+  for (let i = 0; i < slicedData.length; i++) {
+    let fileName = `memes/0${i + 1}.jpg`;
+    console.log(fileName);
+    let file = fs.createWriteStream(fileName);
+    https.get(slicedData[i], function (response) {
+      response.pipe(file);
+    });
+  }
 };
-
 scraper();
-
-// axios
-//   .get('https://memegen-link-examples-upleveled.netlify.app/')
-//   .then((response) => {
-//     const $ = cheerio.load(response.data);
-//     $('.').each((index, element) => {
-//       console.log(index + ':' + element);
-//     });
-//   });
-
-// })
-// .catch((error) => {
-//   console.log(error);
-// });
-
-// async function getHTML(url) {
-//   const { data } = await axios.get(url);
-//   return cheerio.load(data);
-// }
-
-// const $ = await getHTML('https://memegen-link-examples-upleveled.netlify.app/');

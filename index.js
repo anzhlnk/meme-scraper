@@ -14,13 +14,19 @@ const scraper = async () => {
     data.push($(elem).attr('src'));
   });
 
+  const folderName = './memes';
+
+  try {
+    if (!fs.existsSync(folderName)) {
+      fs.mkdirSync(folderName);
+    }
+  } catch (err) {
+    console.error(err);
+  }
+
   const slicedData = data.slice(0, 10);
+
   for (let i = 0; i < slicedData.length; i++) {
-    fs.mkdir('./memes', { recursive: true }, function (err) {
-      if (err) {
-        console.log(err);
-      }
-    });
     const fileName = `memes/0${i + 1}.jpg`;
     const file = fs.createWriteStream(fileName);
     https.get(slicedData[i], function (response) {

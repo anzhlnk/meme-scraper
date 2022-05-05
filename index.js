@@ -16,6 +16,11 @@ const scraper = async () => {
   console.log(slicedData);
 
   for (let i = 0; i < slicedData.length; i++) {
+    fs.mkdir('./memes', { recursive: true }, function (err) {
+      if (err) {
+        console.log(err);
+      }
+    });
     let fileName = `memes/0${i + 1}.jpg`;
     console.log(fileName);
     let file = fs.createWriteStream(fileName);

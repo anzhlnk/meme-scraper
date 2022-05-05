@@ -9,10 +9,12 @@ const scraper = async () => {
   );
   const $ = await load(html.data);
   const data = [];
-  $('div').each((i, elem) => {
-    data.push($(elem).find('img').attr('src'));
+  $('img').each((i, elem) => {
+    // data.push($(elem).find('img').attr('src')); old version, then slice would start from the 3rd index until the 13th
+    data.push($(elem).attr('src'));
   });
-  const slicedData = data.slice(3, 13);
+
+  const slicedData = data.slice(0, 10);
   for (let i = 0; i < slicedData.length; i++) {
     fs.mkdir('./memes', { recursive: true }, function (err) {
       if (err) {

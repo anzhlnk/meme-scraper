@@ -1,14 +1,14 @@
+import fs from 'node:fs';
+import https from 'node:https';
 import axios from 'axios';
 import { load } from 'cheerio';
-import fs from 'fs';
-import https from 'https';
 
 const scraper = async () => {
   const html = await axios.get(
     'https://memegen-link-examples-upleveled.netlify.app/',
   );
   const $ = await load(html.data);
-  let data = [];
+  const data = [];
   $('div').each((i, elem) => {
     data.push($(elem).find('img').attr('src'));
   });
@@ -19,11 +19,12 @@ const scraper = async () => {
         console.log(err);
       }
     });
-    let fileName = `memes/0${i + 1}.jpg`;
-    let file = fs.createWriteStream(fileName);
+    const fileName = `memes/0${i + 1}.jpg`;
+    const file = fs.createWriteStream(fileName);
     https.get(slicedData[i], function (response) {
       response.pipe(file);
     });
   }
 };
-scraper();
+
+await scraper();

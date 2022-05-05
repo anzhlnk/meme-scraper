@@ -13,8 +13,6 @@ const scraper = async () => {
     data.push($(elem).find('img').attr('src'));
   });
   const slicedData = data.slice(3, 13);
-  console.log(slicedData);
-
   for (let i = 0; i < slicedData.length; i++) {
     fs.mkdir('./memes', { recursive: true }, function (err) {
       if (err) {
@@ -22,7 +20,6 @@ const scraper = async () => {
       }
     });
     let fileName = `memes/0${i + 1}.jpg`;
-    console.log(fileName);
     let file = fs.createWriteStream(fileName);
     https.get(slicedData[i], function (response) {
       response.pipe(file);
